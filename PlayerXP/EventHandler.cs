@@ -1,4 +1,4 @@
-﻿using Exiled.Events.EventArgs;
+using Exiled.Events.EventArgs;
 using Exiled.API.Features;
 using System.Collections.Generic;
 using System.Linq;
@@ -84,7 +84,7 @@ namespace PlayerXP
 			}
 		}
 
-		public void OnPlayerJoin(JoinedEventArgs ev)
+		public void OnVerified(JoinedEventArgs ev)
 		{
 			if (!File.Exists(Path.Combine(PlayerXP.XPPath, $"{ev.Player.UserId}.json"))) pInfoDict.Add(ev.Player.UserId, new PlayerInfo(ev.Player.Nickname));
 		}
