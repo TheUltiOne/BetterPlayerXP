@@ -39,7 +39,7 @@ Developers can access and modify data about each player through the API. After r
 | Command        | Value Type | Description |
 | :-------------: | :---------: | :------ |
 | LVL / LEVEL | PLAYER NAME / STEAMID64 | Displays a user's level and xp. Will also display their server ranking. Not specifying a name will default to yourself. |
-| LB / LEADERBOARD | SIZE | Displays the top users in the server. If no size is specified it will output the top 5. Maximum leaderboard size is 15. |
+| LB / TOP | SIZE | Displays the top users in the server. If no size is specified it will output the top 5. Maximum leaderboard size is 15. |
 
 **Commands that can only be run through RA console.**
 
