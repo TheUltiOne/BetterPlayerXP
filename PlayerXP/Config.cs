@@ -88,7 +88,7 @@ namespace PlayerXP
 
 		// --- XP VALUES ---
 		// All
-		public int RoundWin { get; set; } = 200;
+		public int RoundWin { get; set; } = 500;
 		public int TeamKillPunishment { get; set; } = 200;
 
 		// SCPs
@@ -104,14 +104,14 @@ namespace PlayerXP
 		public int DclassMtfKill { get; set; } = 100;
 		public int DclassScpKill { get; set; } = 200;
 		public int DclassTutorialKill { get; set; } = 100;
-		public int DclassEscape { get; set; } = 100;
+		public int DclassEscape { get; set; } = 250;
 
 		// Scientist
 		public int ScientistDclassKill { get; set; } = 50;
 		public int ScientistChaosKill { get; set; } = 100;
 		public int ScientistScpKill { get; set; } = 200;
 		public int ScientistTutorialKill { get; set; } = 100;
-		public int ScientistEscape { get; set; } = 100;
+		public int ScientistEscape { get; set; } = 250;
 
 		// MTF
 		public int MtfDclassKill { get; set; } = 25;
