@@ -10,7 +10,7 @@ This fork is meant to update the plugin to latest EXILED 2 and 3 in the future, 
 
 **[EXILED](https://github.com/galaxy119/EXILED) must be installed.**
 
-Place the `PlayerXP.dll` file in your `Exiled/Plugins` folder.
+Place the `BetterPlayerXP.dll` file in your `Exiled/Plugins` folder.
 
 # Features
 * Grants xp to players for completing game tasks.
