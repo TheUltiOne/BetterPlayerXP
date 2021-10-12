@@ -99,9 +99,7 @@ namespace PlayerXP
 					pInfoDict[player.UserId].karma = final;
 				}
 			}
-			Log.Warn($"Adjusting player '{player.Nickname}' karma by {amount} to {pInfoDict[player.UserId].karma}");
-		}
-
+	        }
 		internal int GetLevel(string userid)
 		{
 			if (pInfoDict.ContainsKey(userid))
