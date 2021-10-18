@@ -4,7 +4,7 @@ A plugin that adds a leveling system to your server. Users start at level 1, and
 
 # Fork info
 
-This fork is meant to update the plugin to latest EXILED 2 and 3 in the future, and add much more features.
+This fork is meant to update the plugin to latest EXILED 2 and 3 in the future, and add much more features. (Update to 3.0.5 in Progress)
 
 # Installation
 
