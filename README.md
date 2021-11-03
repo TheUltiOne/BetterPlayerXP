@@ -2,13 +2,17 @@
 
 A plugin that adds a leveling system to your server. Users start at level 1, and gain experience through doing tasks such as escaping as a classd or scientist, winning the round, killing an SCP, etc.
 
+# READ ME!!!
+
+There are a few issues with the plugin but it is still usable, One issue is with commands not working! If you want to fix it please go ahead and do so. -Denty (I just rebuilt this since Atom was having an issue with their compiler)
+
 # Fork info
 
-This fork is meant to update the plugin to latest EXILED 2 and 3 in the future, and add much more features. (Update to 3.0.5 in Progress)
+This fork is meant to update the plugin to latest EXILED 2 and 3 in the future, and add much more features.
 
 # Installation
 
-**[EXILED](https://github.com/galaxy119/EXILED) must be installed, 2.14.X for 0.1.0, older for really old 2.0.X, or even 1.5.X or SMod**
+**[EXILED](https://github.com/galaxy119/EXILED) must be installed, 3.3.X, 2.14.X for 0.1.0, older for really old 2.0.X, or even 1.5.X or SMod**
 
 Place the `BetterPlayerXP.dll` file in your `~/.config/Exiled/Plugins` folder.
 
