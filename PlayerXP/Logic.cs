@@ -5,6 +5,9 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using CommandSystem;
+using Exiled.API.Features.Items;
+using Exiled.Events.EventArgs;
 
 namespace PlayerXP
 {
@@ -70,8 +73,6 @@ namespace PlayerXP
 			if (PlayerXP.instance.Config.KarmaEnabled && pInfoDict.ContainsKey(player.UserId))
 			{
 				float final = pInfoDict[player.UserId].karma += amount;
-				Log.Warn("attempting adjust to " + final);
-				Log.Warn(final > PlayerXP.instance.Config.KarmaMaximum);
 				if (final > PlayerXP.instance.Config.KarmaMaximum)
 				{
 					if (canOverflow)
@@ -155,18 +156,19 @@ namespace PlayerXP
 			pInfoDict = pInfoDict.OrderByDescending(x => x.Value.level).ThenByDescending(x => x.Value.xp).ToDictionary(x => x.Key, x => x.Value);
 		}
 
-		private bool IsUnarmed(Player player)
-		{
-			foreach (var item in player.Inventory.items)
-			{
-				if (item.id == ItemType.GrenadeFrag || item.id == ItemType.GunCOM15 ||
-					item.id == ItemType.GunE11SR || item.id == ItemType.GunLogicer ||
-					item.id == ItemType.GunMP7 || item.id == ItemType.GunProject90 ||
-					item.id == ItemType.GunUSP || item.id == ItemType.MicroHID ||
-					item.id == ItemType.SCP018) return false;
-			}
-			return true;
-		}
+		//private bool IsUnarmed(Player player)
+		//{
+		//	foreach (var fuck in Item.IsWeapon)
+		//	{
+		//		if (fuck.id == ItemType.GunCrossvec || Item .IsWeapon.id == ItemType.GunCOM15 ||
+		//			fuck.id == ItemType.GunE11SR || fuck.id == ItemType.GunLogicer ||
+		//			fuck.id == ItemType.GunRevolver || fuck.id == ItemType.GunAK ||
+		//			fuck.id == ItemType.GunShotgun || fuck.id == ItemType.MicroHID ||
+		//			fuck.id == ItemType.GrenadeHE || fuck.id == ItemType.GrenadeFlash ||
+		//			fuck.id == ItemType.SCP018) return false;
+		//	}
+		//	return true;
+		//}
 
 		private Player FindEligibleClassd()
 		{

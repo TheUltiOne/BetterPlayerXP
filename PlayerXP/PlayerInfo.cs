@@ -11,7 +11,7 @@
 		{
 			this.name = name;
 			level = 1;
-			xp = 0;
+			xp = PlayerXP.instance.Config.XpInitial;
 			karma = PlayerXP.instance.Config.KarmaInitial;
 		}
 	}

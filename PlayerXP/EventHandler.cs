@@ -1,8 +1,14 @@
-using Exiled.Events.EventArgs;
 using Exiled.API.Features;
+using Hints;
+using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.IO;
+using System.Linq;
+using CommandSystem;
+using Exiled.API.Features.Items;
+using RemoteAdmin;
+using Exiled.Events.EventArgs;
 
 namespace PlayerXP
 {
@@ -12,77 +18,6 @@ namespace PlayerXP
 		public static Dictionary<Player, Player> pCuffedDict = new Dictionary<Player, Player>();
 
 		private bool isToggled = true;
-
-		public void OnConsoleCommand(SendingConsoleCommandEventArgs ev)
-		{
-			string cmd = ev.Name.ToLower();
-			if (cmd == "level" || cmd == "lvl")
-			{
-				ev.Allow = false;
-				Player player = ev.Arguments.Count == 0 ? ev.Player : Player.Get(ev.Arguments[0]);
-				string name;
-				bool hasData = pInfoDict.ContainsKey(player.UserId);
-				if (player != null) name = player.Nickname;
-				else name = hasData ? pInfoDict[ev.Player.UserId].level.ToString() : "[NO DATA]";
-				ev.ReturnMessage =
-					$"Player: {name} ({player.UserId})\n" +
-					$"Level: {(hasData ? pInfoDict[player.UserId].level.ToString() : "[NO DATA]")}\n" +
-					$"XP: {(hasData ? $"{pInfoDict[player.UserId].xp.ToString()} / {XpToLevelUp(player.UserId)}" : "[NO DATA]")}" + (PlayerXP.instance.Config.KarmaEnabled ? "\n" +
-					$"Karma: {(hasData ? pInfoDict[player.UserId].karma.ToString() : "[NO DATA]")}" : "");
-			}
-			else if (cmd == "leaderboard" || cmd == "lb")
-			{
-				ev.Allow = false;
-				string output;
-				int num = 5;
-				if (ev.Arguments.Count > 0 && int.TryParse(ev.Arguments[0], out int n)) num = n;
-				if (num > 15)
-				{
-					ev.Color = "red";
-					ev.ReturnMessage = "Leaderboards can be no larger than 15.";
-					return;
-				}
-				if (pInfoDict.Count != 0)
-				{
-					output = $"Top {num} Players:\n";
-
-					for (int i = 0; i < num; i++)
-					{
-						if (pInfoDict.Count == i) break;
-						string userid = pInfoDict.ElementAt(i).Key;
-						PlayerInfo info = pInfoDict[userid];
-						output += $"{i + 1}) {info.name} ({userid}) | Level: {info.level} | XP: {info.xp} / {XpToLevelUp(userid)}{(PlayerXP.instance.Config.KarmaEnabled ? $" | Karma: {info.karma}" : "")}";
-						if (i != pInfoDict.Count - 1) output += "\n";
-						else break;
-					}
-
-					ev.Color = "yellow";
-					ev.ReturnMessage = output;
-				}
-				else
-				{
-					ev.Color = "red";
-					ev.ReturnMessage = "Error: there is not enough data to display the leaderboard.";
-				}
-			}
-		}
-
-		public void OnRAConsoleCommand(SendingRemoteAdminCommandEventArgs ev)
-		{
-			string cmd = ev.Name.ToLower();
-			if (cmd == "xptoggle")
-			{
-				ev.IsAllowed = false;
-				ev.Sender.RemoteAdminMessage($"XP saving has been toggled {(isToggled ? "on" : "off")}");
-				isToggled = false;
-			}
-			else if (cmd == "xpsave")
-			{
-				ev.IsAllowed = false;
-				ev.Sender.RemoteAdminMessage("Stats saved!");
-				SaveStats();
-			}
-		}
 
 		public void OnVerified(VerifiedEventArgs ev)
 		{
@@ -152,7 +87,7 @@ namespace PlayerXP
 				if (ev.Target.Team == Team.RSC)
 				{
 					gainedXP = PlayerXP.instance.Config.DclassScientistKill;
-					isUnarmed = IsUnarmed(ev.Target);
+					//isUnarmed = IsUnarmed(ev.Target);
 				}
 				if (ev.Target.Team == Team.MTF) gainedXP = PlayerXP.instance.Config.DclassMtfKill;
 				if (ev.Target.Team == Team.SCP) gainedXP = PlayerXP.instance.Config.DclassScpKill;
@@ -171,7 +106,7 @@ namespace PlayerXP
 				if (ev.Target.Team == Team.CDP)
 				{
 					gainedXP = PlayerXP.instance.Config.ScientistDclassKill;
-					isUnarmed = IsUnarmed(ev.Target);
+					//isUnarmed = IsUnarmed(ev.Target);
 				}
 				if (ev.Target.Team == Team.CHI) gainedXP = PlayerXP.instance.Config.ScientistChaosKill;
 				if (ev.Target.Team == Team.SCP) gainedXP = PlayerXP.instance.Config.ScientistScpKill;
@@ -251,7 +186,7 @@ namespace PlayerXP
 						if (player.Role == RoleType.Tutorial)
 						{
 							int xp = CalcXP(player, PlayerXP.instance.Config.TutorialScpKillsPlayer);
-							AddXP(player.UserId, xp, PlayerXP.instance.Config.TutorialScpKillsPlayerMessage.Replace("{xp}", xp.ToString()).Replace("{target}", ev.Target.Nickname));
+							if (PlayerXP.instance.Config.IsSH) AddXP(player.UserId, xp, PlayerXP.instance.Config.TutorialScpKillsPlayerMessage.Replace("{xp}", xp.ToString()).Replace("{target}", ev.Target.Nickname));
 						}
 					}
 				}
@@ -263,7 +198,7 @@ namespace PlayerXP
 						if (player.Role == RoleType.Scp079)
 						{
 							int xp = CalcXP(player, PlayerXP.instance.Config.Scp079AssistedKill);
-							AddXP(player.UserId, xp, PlayerXP.instance.Config.Scp079AssistedKillMessage.Replace("{xp}", xp.ToString()).Replace("{target}", ev.Target.Nickname));
+							if (PlayerXP.instance.Config.IsSH) AddXP(player.UserId, xp, PlayerXP.instance.Config.Scp079AssistedKillMessage.Replace("{xp}", xp.ToString()).Replace("{target}", ev.Target.Nickname));
 						}
 					}
 				}
@@ -307,7 +242,7 @@ namespace PlayerXP
 
 			if (ev.Player.IsCuffed)
 			{
-				Player cuffer = Player.Get(ev.Player.CufferId);
+				Player cuffer = ev.Player.Cuffer;
 				if (cuffer != null) AdjustKarma(cuffer, PlayerXP.instance.Config.KarmaGainedOnDisarmedEscape, true);
 			}
 

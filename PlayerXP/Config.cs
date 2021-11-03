@@ -13,6 +13,12 @@ namespace PlayerXP
 		[Description("Whether or not debug information should be output to the console.")]
 		public bool IsDebug { get; set; } = false;
 
+		[Description("Threat Tutorials as SCPs (Serpent's Hand Compatibilty).")]
+		public bool IsSH { get; set; } = false;
+
+		[Description("The amount of XP all players start with.")]
+		public int XpInitial { get; set; } = 100;
+
 		[Description("A global scaling factor for all XP values.")]
 		public float XpScale { get; set; } = 1.0f;
 
