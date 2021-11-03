@@ -13,7 +13,7 @@ namespace PlayerXP
 		public static string XPPath = Path.Combine(Path.Combine(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "EXILED"), "Plugins"), "PlayerXP");
 
 		public override string Name => "PlayerXp";
-		public override string Author { get; } = "Cyanox, AtomSnow";
+		public override string Author { get; } = "Cyanox, AtomSnow, DentyTxR (Partial update)";
         public override Version RequiredExiledVersion { get; } = new Version(3, 0, 5);
         public override string Prefix { get; } = "pxp";
         public override Version Version { get; } = new Version(0, 2, 0);
