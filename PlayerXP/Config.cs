@@ -1,5 +1,8 @@
-﻿using Exiled.API.Interfaces;
+﻿using System.Collections.Generic;
+using Exiled.API.Interfaces;
 using System.ComponentModel;
+using System.Linq;
+using Exiled.API.Features;
 
 namespace PlayerXP
 {
@@ -97,6 +100,31 @@ namespace PlayerXP
 		public int RoundWin { get; set; } = 500;
 		public int TeamKillPunishment { get; set; } = 200;
 
+		public List<KillXP> XPOnKill = new List<KillXP>()
+		{
+			// SCPs
+			new KillXP { AttackerRole = RoleType.Scp049 },
+			new KillXP { AttackerRole = RoleType.Scp0492},
+			new KillXP { AttackerRole = RoleType.Scp096 },
+			new KillXP { AttackerRole = RoleType.Scp106 },
+			new KillXP { AttackerRole = RoleType.Scp93953 },
+			new KillXP { AttackerRole = RoleType.Scp93989 },
+			
+			// Class-D
+			new KillXP { AttackerRole = RoleType.ClassD, TargetRole = RoleType.Scientist, XPRewarded = 50 },
+			new KillXP { AttackerRole = RoleType.ClassD, TargetRole = RoleType.NtfPrivate, XPRewarded = 75 },
+			new KillXP { AttackerRole = RoleType.ClassD, TargetRole = RoleType.NtfSergeant, XPRewarded = 100 },
+			new KillXP { AttackerRole = RoleType.ClassD, TargetRole = RoleType.NtfSpecialist, XPRewarded = 125 },
+			new KillXP { AttackerRole = RoleType.ClassD, TargetRole = RoleType.NtfCaptain, XPRewarded = 150 },
+			new KillXP { AttackerRole = RoleType.ClassD, TargetRole = RoleType.Scp0492, XPRewarded = 150 },
+			new KillXP { AttackerRole = RoleType.ClassD, TargetTeam = Team.SCP, XPRewarded = 250 },
+			new KillXP { AttackerRole = RoleType.ClassD, TargetRole = RoleType.Tutorial, XPRewarded = 100 },
+			
+			// Scientist
+			new KillXP { AttackerRole = RoleType.Scientist, TargetRole = RoleType.ClassD, XPRewarded = 50 },
+			new KillXP { AttackerRole = RoleType.Scientist, TargetTeam = Team.CHI, XPRewarded = 100 },
+		};
+
 		// SCPs
 		public int Scp049Kill { get; set; } = 25;
 		public int Scp0492Kill { get; set; } = 25;
@@ -148,5 +176,34 @@ namespace PlayerXP
 
 		// SCP-079
 		public int Scp079AssistedKill { get; set; } = 10;
+	}
+
+	public class KillXP
+	{
+		public RoleType AttackerRole { get; set; }
+		public Team AttackerTeam { get; set; }
+
+		public RoleType TargetRole { get; set; } = RoleType.None;
+		public Team TargetTeam { get; set; } = Team.RIP;
+		public int XPRewarded { get; set; } = 25;
+
+		public static KillXP GetKillXP(Player attacker, Player target)
+		{
+			var result = PlayerXP.instance.Config.XPOnKill.FirstOrDefault(x => (x.AttackerRole == RoleType.None ? attacker.Team == x.AttackerTeam : attacker.Role == x.AttackerRole) && (x.TargetRole == RoleType.None ? (x.TargetTeam == Team.RIP)));
+			if (result == null)
+		}
+	}
+
+	public class SelfEscapeXP
+	{
+		public RoleType Role { get; set; }
+		public int XPRewarded { get; set; }
+	}
+
+	public class TeamEscapeXP
+	{
+		public RoleType RoleEscaped { get; set; }
+		public Team TeamToGiveXP { get; set; }
+		public int XPRewarded { get; set; }
 	}
 }

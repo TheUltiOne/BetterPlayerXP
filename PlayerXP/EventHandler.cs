@@ -37,7 +37,7 @@ namespace PlayerXP
 			{
 				if (pInfoDict.ContainsKey(player.UserId))
 				{
-					if (pInfoDict[player.UserId].karma < PlayerXP.instance.Config.KarmaLabeledBadActor)
+					if (pInfoDict[player.UserId].Karma < PlayerXP.instance.Config.KarmaLabeledBadActor)
 					{
 						Player swap = FindEligibleClassd();
 						swap.SetRole(player.Role);
@@ -80,6 +80,8 @@ namespace PlayerXP
 				// Player teamkilled
 			}
 
+			
+			
 			if (ev.Killer.Team == Team.CDP)
 			{
 				int gainedXP = 0;
